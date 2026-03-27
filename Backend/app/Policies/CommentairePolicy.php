@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Policies;
+
+use App\Models\Commentaire;
+use App\Models\User;
+
+class CommentairePolicy
+{
+    /**
+     * Determine whether the user can view any models.
+     */
+    public function viewAny(?User $user): bool
+    {
+        return true;
+    }
+
+    /**
+     * Determine whether the user can create models.
+     */
+    public function create(User $user): bool
+    {
+        return true;
+    }
+
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function update(User $user, Commentaire $commentaire): bool
+    {
+        if ($user->isAdmin()) return true;
+        return $commentaire->user_id === $user->id;
+    }
+
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function delete(User $user, Commentaire $commentaire): bool
+    {
+        if ($user->isAdmin()) return true;
+        return $commentaire->user_id === $user->id;
+    }
+}
